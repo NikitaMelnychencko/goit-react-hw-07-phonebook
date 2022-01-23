@@ -1,5 +1,4 @@
-import { combineReducers } from 'redux';
-import { createReducer, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { addFilter } from './phonebook-actions';
 import operation from './phonebobook-operation';
 
