@@ -25,7 +25,6 @@ const Home = () => {
   const [userIdDel, setUserIdDel] = useState(null);
   const contacts = useSelector(filterContacts);
   const onLoading = useSelector(getLoading);
-  console.log(onLoading);
   const filter = useSelector(getFilter);
   const dispatch = useDispatch();
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { useState,useRef,useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { filterContacts } from 'redux/contacts/phonebook-selectors';
+import { useDispatch } from 'react-redux';
+import { fetchContactsById } from'../../cotactApi'
 import { useParams } from 'react-router-dom';
 import Section from 'components/Section/Section';
 import s from './ContactDetailsPage.module.scss';
@@ -10,18 +10,19 @@ import { nanoid } from 'nanoid';
 import contactOperation from '../../redux/contacts/phonebobook-operation'
 
 const ContactDetailsPage = () => {
-  const contacts = useSelector(filterContacts);
+  const [user, setUser] = useState({});
+  const [key, setKey] = useState([]);
+  const lastStep = useRef(user);
   const [newFolder, setNewFolder] = useState(false);
   const [nameFolder, setNameFolder] = useState('');
   const [valueFolder, setValueFolder] = useState('');
   const dispatch = useDispatch();
   const params = useParams();
-  
-  const [user] = contacts.filter(el => el.id === params.contactId);
-  const key = Object.keys(user);
-  const lastStep = useRef(user);
-  
+
   useEffect(() => {
+    const arrayKey = Object.keys(user)
+    if (arrayKey.length === 0) fetchContactsById(params.contactId).then(data => setUser(data));
+    setKey(arrayKey)
     lastStep.current=user
   }, [user]);
 
