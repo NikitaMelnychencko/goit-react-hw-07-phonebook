@@ -22,6 +22,17 @@ const contacts = createSlice({
     [operation.fetchContacts.rejected]: (state, action) => {
       state.loading = false;
     },
+    //====fetchContactById====//
+    [operation.fetchContactById.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [operation.fetchContactById.fulfilled]: (state, { payload }) => {
+      state.items = [payload];
+      state.loading = false;
+    },
+    [operation.fetchContactById.rejected]: (state, action) => {
+      state.loading = false;
+    },
 
     //====addContacts====//
     [operation.addContacts.pending]: (state, action) => {

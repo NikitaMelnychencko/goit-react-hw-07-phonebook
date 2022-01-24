@@ -1,6 +1,5 @@
 import { useState,useRef,useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchContactsById } from'../../cotactApi'
+import { useDispatch,useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Section from 'components/Section/Section';
 import s from './ContactDetailsPage.module.scss';
@@ -8,8 +7,9 @@ import ContactDetailsPageItem from '../../components/ContactDetailsPageItem/Cont
 import Modal from 'components/Modal/Modal-approve';
 import { nanoid } from 'nanoid';
 import contactOperation from '../../redux/contacts/phonebobook-operation'
-
+import {filterContacts} from 'redux/contacts/phonebook-selectors';
 const ContactDetailsPage = () => {
+  const contact = useSelector(filterContacts);
   const [user, setUser] = useState({});
   const [key, setKey] = useState([]);
   const lastStep = useRef(user);
@@ -18,13 +18,21 @@ const ContactDetailsPage = () => {
   const [valueFolder, setValueFolder] = useState('');
   const dispatch = useDispatch();
   const params = useParams();
+  useEffect(() => {   
+    if (contact.length === 0){dispatch(contactOperation.fetchContactById(params.contactId))} else {
+      const currentUser = contact[0]
+      const arrayKey = Object.keys(currentUser)
+      setKey(arrayKey)
+      setUser(currentUser)
+    }  
+  }, [contact, dispatch, params.contactId, user]);
+    useEffect(() => {   
 
-  useEffect(() => {
-    const arrayKey = Object.keys(user)
-    if (arrayKey.length === 0) fetchContactsById(params.contactId).then(data => setUser(data));
-    setKey(arrayKey)
-    lastStep.current=user
-  }, [user]);
+    return () => {
+     if (contact.length > 0) lastStep.current = contact[0];      
+    }    
+  }, [contact]);
+
 
   const updateValue = (nameType, upValue) => {
     const updatedContact = { ...user, [nameType]: upValue };
@@ -53,7 +61,7 @@ const ContactDetailsPage = () => {
   };
   const deleteValue = nameType => {
     const updateUser = { ...user };
-    delete updateUser[nameType];
+    updateUser[nameType] = null;
     const updatedContact = { ...updateUser };
 
     dispatch(contactOperation.updateContacts({ contactData:updatedContact,contactId:params.contactId }));
@@ -64,7 +72,7 @@ const ContactDetailsPage = () => {
         <ul className={s.FormList}>
         {key.map(
           userKey =>
-            (userKey !== 'id'&&userKey !=='createdAt') && (
+            (userKey !== 'id'&&userKey !=='createdAt'&& user[userKey]!== null) && (
               <ContactDetailsPageItem
                 key={nanoid()}
                 name={userKey}

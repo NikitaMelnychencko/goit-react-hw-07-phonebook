@@ -14,6 +14,17 @@ const fetchContacts = createAsyncThunk(
     }
   },
 );
+const fetchContactById = createAsyncThunk(
+  'contacts/fetchItemById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const contact = await axios.get(`/contacts/${id}`);
+      return contact.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  },
+);
 
 const addContacts = createAsyncThunk(
   'contacts/addItem',
@@ -54,6 +65,7 @@ const updateContacts = createAsyncThunk(
 
 export default {
   fetchContacts,
+  fetchContactById,
   addContacts,
   dellContacts,
   updateContacts,
