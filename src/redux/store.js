@@ -4,7 +4,7 @@ import {
   getDefaultMiddleware,
 } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import contactsReducer from './contacts/phonebook-reducer';
+import contactsReducer from './contacts/phonebook-slice';
 import {
   persistStore,
   FLUSH,
