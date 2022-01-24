@@ -6,7 +6,10 @@ const Section = ({ children, title }) => {
     <section className={s.Section}>
       <div className={s.Container}>
         <h2 className={s.Title}>{title}</h2>
-        {children}
+        <div className={s.Loading}>
+          {children}
+        </div>
+        
       </div>
     </section>
   );

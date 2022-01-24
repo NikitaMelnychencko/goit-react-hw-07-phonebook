@@ -7,12 +7,15 @@ import ContactDetailsPageItem from '../../components/ContactDetailsPageItem/Cont
 import Modal from 'components/Modal/Modal-approve';
 import { nanoid } from 'nanoid';
 import contactOperation from '../../redux/contacts/phonebobook-operation'
-import {filterContacts} from 'redux/contacts/phonebook-selectors';
+import {filterContacts,  getLoading} from 'redux/contacts/phonebook-selectors';
+import { BallTriangle } from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 const ContactDetailsPage = () => {
   const contact = useSelector(filterContacts);
   const [user, setUser] = useState({});
   const [key, setKey] = useState([]);
   const lastStep = useRef(user);
+  const onLoading = useSelector(getLoading);
   const [newFolder, setNewFolder] = useState(false);
   const [nameFolder, setNameFolder] = useState('');
   const [valueFolder, setValueFolder] = useState('');
@@ -82,7 +85,16 @@ const ContactDetailsPage = () => {
                 lastStep={lastStep.current[userKey]}
               />
             ),
-        )}</ul>
+          )}</ul>
+        {onLoading && (
+          <BallTriangle
+            heigth="100"
+            width="100"
+            color="#000000"
+            arialLabel="loading"
+            timeout={3000}
+          />
+        )}
         {newFolder ? (
           <Modal onClose={showForm}>
             <div>
